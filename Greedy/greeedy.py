@@ -21,4 +21,4 @@ for i in range(len(data[0])): ## i desde 0 a len de cada linea en data, en este 
     selected = random.randint(0, len(candidates) - 1)
     ans += candidates[selected]
 
-print(ans)
+print(ans) 
