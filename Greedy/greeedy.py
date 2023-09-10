@@ -1,6 +1,17 @@
 import random
+import time
+import sys
 
-with open ('../n100_m200_l15_a4/inst_200_15_4_0.txt',"r") as input:
+# Verifica si se proporciona al menos un argumento
+if len(sys.argv) < 2:
+    print("Por favor, proporciona la entrada.")
+else:
+    # El primer argumento (sys.argv[0]) es el nombre del script
+    # El segundo argumento (sys.argv[1]) es el argumento que proporcionas
+    parametro = sys.argv[1]
+
+
+with open ('../n100_m200_l15_a4/'+parametro,"r") as input:
     data = []
     for line in input:
         line =line.replace("\n","")
@@ -8,6 +19,8 @@ with open ('../n100_m200_l15_a4/inst_200_15_4_0.txt',"r") as input:
 
 dict = [] 
 ans = ''
+
+start_time = time.time()
 
 for i in range(len(data[0])): ## i desde 0 a len de cada linea en data, en este caso 15
     dict.append({'A': 0, 'C': 0, 'T': 0, 'G': 0}) ## Dentro de la lista dict genera un mapa con { , , }
@@ -21,4 +34,18 @@ for i in range(len(data[0])): ## i desde 0 a len de cada linea en data, en este 
     selected = random.randint(0, len(candidates) - 1)
     ans += candidates[selected]
 
-print(ans) 
+end_time = time.time()
+
+total_time=end_time-start_time
+
+distance=0
+
+for line in data:
+    different_letter=0
+    for i in range(len(line)):
+        if ans[i]==line[i]:
+            different_letter+=1
+        
+    distance+=different_letter**2
+
+print("Concenso: "+ans+", Tiempo: "+ str(total_time)+", Distancia: "+str(distance)+"seg")
