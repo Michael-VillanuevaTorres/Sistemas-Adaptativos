@@ -46,13 +46,9 @@ for i in range(len(data[0])): ## i desde 0 a len de cada linea en data, en este 
             candidates_aleatorios.append(protein)
             
 
-    if numero_aleatorio > n_determinist:        
-        if (len(candidates_aleatorios)==0):
-            selected = random.randint(0, len(candidates_max) - 1)
-            ans += candidates_max[selected]
-        else:    
-            selected = random.randint(0, len(candidates_aleatorios) - 1)
-            ans += candidates_aleatorios[selected]
+    if numero_aleatorio > n_determinist and len(candidates_aleatorios)!=0:
+        selected = random.randint(0, len(candidates_aleatorios) - 1)
+        ans += candidates_aleatorios[selected]
     else:
         selected = random.randint(0, len(candidates_max) - 1)
         ans += candidates_max[selected]
