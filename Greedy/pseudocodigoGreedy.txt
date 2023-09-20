@@ -1,0 +1,24 @@
+data = open(test_file)
+
+dict = []
+ans = ''
+
+for i in range of data[0].length:
+  dict.append({'A': 0, 'C': 0, 'T': 0, 'G': 0})
+  for each sample in data:
+    dict[i][sample[i]] += 1
+
+  candidates = get_all_max(dic[i])
+
+  selected = randint(0, candidates.length)
+  ans += candidates[selected]
+
+distance = 0
+
+for each sample in data:
+  different_letter = 0
+  for i in range of sample.length:
+    if ans[i] != sample[i]:
+      different_letter += 1
+  
+  distance += different_letter * different_letter
