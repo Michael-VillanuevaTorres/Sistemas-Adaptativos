@@ -1,0 +1,34 @@
+data = open(test_file)
+
+dict = []
+ans = ''
+
+for i in range of data[0].length:
+  dict.append({'A': 0, 'C': 0, 'T': 0, 'G': 0})
+  for each sample in data:
+    dict[i][sample[i]] += 1
+
+  rand_number = randfloat(0, 1)
+
+  best_candidates = get_all_max(dic[i])
+  non_best_candidates = dic[i] - best_candidates
+
+  if rand_number > n_determinist and non_best_candidates is not empty:
+    selected = randint(0, non_best_candidates.length - 1)
+    ans += non_best_candidates[selected]
+  else:
+    selected = randint(0, best_candidates.length - 1)
+    ans += best_candidates[selected]
+
+  selected = randInt(0, candidates.length)
+  ans += candidates[selected]
+
+distance = 0
+
+for each sample in data:
+  different_letter = 0
+  for i in range of sample.length:
+    if ans[i] != sample[i]:
+      different_letter += 1
+  
+  distance += different_letter * different_letter
