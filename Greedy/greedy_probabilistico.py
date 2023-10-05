@@ -7,7 +7,7 @@ if len(sys.argv) < 2:
     print("Por favor, proporciona el numero de la entrada y recuerde que puede colocar el nivel de determinismo como 2do argumento.")
     exit()
 else:
-    # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
+    # El segundo argumento (sys.argv[1]) numero de la instancia
     # El tercer argumento (sys.argv[2]) es el nivel de determinismo
     inst = sys.argv[1]    
 
