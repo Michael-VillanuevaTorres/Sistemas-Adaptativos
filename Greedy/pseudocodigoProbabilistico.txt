@@ -1,3 +1,5 @@
+n_determinist = getargs()
+
 data = open(test_file)
 
 dict = []

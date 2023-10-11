@@ -16,16 +16,19 @@ def objective_function(consensus, data):
 
 
 # Verifica si se proporciona al menos un argumento
-if len(sys.argv) < 3:
+if len(sys.argv) < 5:
     print("Por favor, proporciona este tipo de entrada --> ´python3 simulated_Annealing.py -i instanciaProblema -t tiempoMaximoSegundos´ .")
     exit()
 else:
     # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
     # El tercer argumento (sys.argv[2]) es el nivel de determinismo
-    inst = sys.argv[1]    
+    iIndex = sys.argv.index('-i')
+    inst = sys.argv[iIndex + 1]
+    tIndex = sys.argv.index('-t')
+    maxTime = sys.argv[tIndex + 1]
 
     if len(sys.argv) > 2:
-        Tiempo = float(sys.argv[2])
+        maxTime = float(maxTime)
 
 def greedy(data):
 
