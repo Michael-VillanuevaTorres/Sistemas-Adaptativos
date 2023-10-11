@@ -26,9 +26,7 @@ else:
     inst = sys.argv[iIndex + 1]
     tIndex = sys.argv.index('-t')
     maxTime = sys.argv[tIndex + 1]
-
-    if len(sys.argv) > 2:
-        maxTime = float(maxTime)
+    maxTime = float(maxTime)
 
 def greedy(data):
 
