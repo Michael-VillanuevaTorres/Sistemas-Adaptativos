@@ -87,7 +87,7 @@ def simulated(data,initial_temperature,cooling_rate,max_iterations):
 if __name__ == "__main__":
     initial_temperature = 1000.0
     cooling_rate = 0.95
-    max_iterations = 1000
+    max_iterations = 10000
 
     with open ('../n100_m200_l15_a4/inst_200_15_4_'+str(inst)+".txt","r") as input:
         data = []
