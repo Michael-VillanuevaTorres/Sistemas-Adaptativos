@@ -13,7 +13,7 @@ else:
 
 
         
-with open ('../n100_m200_l15_a4/inst_200_15_4_'+str(parametro)+".txt","r") as input:
+with open ('../n100_m200_l15_a4/inst_1000_500_4_'+str(parametro)+".txt","r") as input:
     data = []
     for line in input:
         line =line.replace("\n","")

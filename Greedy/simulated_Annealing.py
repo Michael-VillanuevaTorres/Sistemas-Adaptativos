@@ -14,20 +14,6 @@ def objective_function(consensus, data):
         distance+=different_letter**2
     return distance
 
-
-# Verifica si se proporciona al menos un argumento
-if len(sys.argv) < 5:
-    print("Por favor, proporciona este tipo de entrada --> ´python3 simulated_Annealing.py -i instanciaProblema -t tiempoMaximoSegundos´ .")
-    exit()
-else:
-    # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
-    # El tercer argumento (sys.argv[2]) es el nivel de determinismo
-    iIndex = sys.argv.index('-i')
-    inst = sys.argv[iIndex + 1]
-    tIndex = sys.argv.index('-t')
-    maxTime = sys.argv[tIndex + 1]
-    maxTime = float(maxTime)
-
 def greedy(data):
 
     dict = [] 
@@ -48,7 +34,7 @@ def greedy(data):
 
     return (result)
 
-def simulated(data,initial_temperature,cooling_rate,max_iterations):
+def simulated(data,initial_temperature,cooling_rate,maxTime):
     consensus = greedy(data)
     current_distance = objective_function(consensus, data)
     
@@ -57,7 +43,9 @@ def simulated(data,initial_temperature,cooling_rate,max_iterations):
     
     temperature = initial_temperature
 
-    for iteration in range(max_iterations):
+    start = time.time()
+
+    while time.time() - start <= maxTime: 
         # Genera una solución vecina perturbando la solución actual
         neighbor = list(consensus)
         index_to_change = random.randint(0, len(neighbor) - 1)
@@ -86,6 +74,19 @@ def simulated(data,initial_temperature,cooling_rate,max_iterations):
 
     
 if __name__ == "__main__":
+    # Verifica si se proporciona al menos un argumento
+    if len(sys.argv) < 5:
+        print("Por favor, proporciona este tipo de entrada --> ´python3 simulated_Annealing.py -i instanciaProblema -t tiempoMaximoSegundos´ .")
+        exit()
+    else:
+        # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
+        # El tercer argumento (sys.argv[2]) es el nivel de determinismo
+        iIndex = sys.argv.index('-i')
+        inst = sys.argv[iIndex + 1]
+        tIndex = sys.argv.index('-t')
+        maxTime = sys.argv[tIndex + 1]
+        maxTime = float(maxTime)
+
     initial_temperature = 1000.0
     cooling_rate = 0.95
     max_iterations = 10000
@@ -96,7 +97,7 @@ if __name__ == "__main__":
             line =line.replace("\n","")
             data.append(line)
 
-    best_consensus, best_distance=simulated(data,initial_temperature,cooling_rate,max_iterations)
+    best_consensus, best_distance=simulated(data,initial_temperature,cooling_rate,maxTime)
     
     print("Mejor consenso:", best_consensus)
     print("Distancia mínima:", best_distance)
