@@ -37,7 +37,7 @@ def greedy(data):
 def simulated(data,initial_temperature,cooling_rate,maxTime):
     consensus = greedy(data)
     current_distance = objective_function(consensus, data)
-    
+    greedy_distance=current_distance
     best_consensus = consensus
     best_distance = current_distance
     
@@ -70,7 +70,7 @@ def simulated(data,initial_temperature,cooling_rate,maxTime):
         # Reduce la temperatura 
         temperature *= cooling_rate
  
-    return best_consensus, best_distance
+    return greedy_distance,best_consensus, best_distance
 
     
 if __name__ == "__main__":
@@ -90,14 +90,22 @@ if __name__ == "__main__":
     initial_temperature = 1000.0
     cooling_rate = 0.95
     max_iterations = 10000
+    with open ("greedydatos.txt","w") as output:
+        output.write("inst  m    l      greedy     mh")
+        string_num=500
+        for j in range(3):
+            string_len=100
+            for inst in range(100):
+                with open ('../n100_m200_l15_a4/inst_'+str(string_num)+'_'+str(string_len)+'_4_'+str(inst)+".txt","r") as input:
+                    data = []
+                    for line in input:
+                        line =line.replace("\n","")
+                        data.append(line)
 
-    with open ('../n100_m200_l15_a4/inst_200_15_4_'+str(inst)+".txt","r") as input:
-        data = []
-        for line in input:
-            line =line.replace("\n","")
-            data.append(line)
+                greedy_distance,best_consensus, best_distance=simulated(data,initial_temperature,cooling_rate,maxTime)
 
-    best_consensus, best_distance=simulated(data,initial_temperature,cooling_rate,maxTime)
-    
-    print("Mejor consenso:", best_consensus)
-    print("Distancia mínima:", best_distance)
+                output.write(str(inst)+"   "+str(string_num)+"   "+str(string_len)+"   "+str(greedy_distance)+"   "+str(best_distance)+"\n")
+                
+                print(str(string_num)+"_"+str(string_len)+"  "+str(greedy_distance)+"   "+str(best_distance)+"\n")  
+
+            string_len+=200
