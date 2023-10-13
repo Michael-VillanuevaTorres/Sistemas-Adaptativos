@@ -89,11 +89,11 @@ if __name__ == "__main__":
         maxTime = sys.argv[tIndex + 1]
         maxTime = float(maxTime)
 
-    initial_temperature = 1000.0
+    initial_temperature = 10000.0
     cooling_rate = 0.95
     with open ("greedydatos1000.txt","w") as output:
         output.write("inst  m    l      greedy     mh")
-        string_num='1000'
+        string_num='500'
         string_len=100
         for j in range(3):
             mh_time = 0
