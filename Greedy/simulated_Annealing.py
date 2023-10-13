@@ -34,7 +34,7 @@ def greedy(data):
 
     return (result)
 
-def simulated(data,initial_temperature,cooling_rate,maxTime,mh_time):
+def simulated(data,initial_temperature,cooling_rate,maxTime):
     consensus = greedy(data)
     current_distance = objective_function(consensus, data)
     greedy_distance=current_distance
@@ -45,14 +45,13 @@ def simulated(data,initial_temperature,cooling_rate,maxTime,mh_time):
 
     start = time.time()
 
+    best_last_time = maxTime
     while time.time() - start <= maxTime: 
         # Genera una solución vecina perturbando la solución actual
         neighbor = list(consensus)
         index_to_change = random.randint(0, len(neighbor) - 1)
         neighbor[index_to_change] = random.choice('ACGT')
         neighbor = ''.join(neighbor)
-
-        best_last_time = maxTime
 
         neighbor_distance = objective_function(neighbor, data)
         
@@ -73,8 +72,7 @@ def simulated(data,initial_temperature,cooling_rate,maxTime,mh_time):
         # Reduce la temperatura 
         temperature *= cooling_rate
  
-    mh_time += best_last_time
-    return greedy_distance,best_consensus, best_distance
+    return greedy_distance,best_consensus, best_distance, best_last_time
 
     
 if __name__ == "__main__":
@@ -106,11 +104,12 @@ if __name__ == "__main__":
                         line =line.replace("\n","")
                         data.append(line)
 
-                greedy_distance,best_consensus, best_distance=simulated(data,initial_temperature,cooling_rate,maxTime,mh_time)
+                greedy_distance,best_consensus, best_distance, best_last_time=simulated(data,initial_temperature,cooling_rate,maxTime)
 
                 output.write(str(inst)+"   "+string_num+"   "+str(string_len)+"   "+str(greedy_distance)+"   "+str(best_distance)+"\n")
                 
-                print(string_num+"_"+str(string_len)+"_"+str(inst)+"  "+str(greedy_distance)+"   "+str(best_distance)+"")  
+                print(string_num+"_"+str(string_len)+"_"+str(inst)+"  "+str(greedy_distance)+"   "+str(best_distance)+"   "+str(best_last_time))  
+                mh_time+=best_last_time
             
             mh_time /= 100
             string_len+=200
