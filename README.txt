@@ -17,7 +17,7 @@ python3 simulated_Annealing.py -i 500_100_4_0 -t 60
 
 o
 
-python3 simulated_Annealing.py -i 500_100_4_0 -t 60 -it 20000 -cr 0.4
+python3 simulated_Annealing.py -i 500_100_4_0 -t 60 -it 20000 -cr 0.97
 
 Donde:
 -i es la instancia
