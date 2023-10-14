@@ -89,7 +89,17 @@ if __name__ == "__main__":
         tIndex = sys.argv.index('-t')
         maxTime = sys.argv[tIndex + 1]
         maxTime = float(maxTime)
-    
+    else:
+        iIndex = sys.argv.index('-i')
+        inst = sys.argv[iIndex + 1]
+        tIndex = sys.argv.index('-t')
+        maxTime = sys.argv[tIndex + 1]
+        maxTime = float(maxTime)
+        itIndex = sys.argv.index('-it')
+        initial_temperature = float(sys.argv[itIndex + 1])
+        crIndex = sys.argv.index('-cr')
+        cooling_rate = float(sys.argv[crIndex + 1])
+        
 
     with open ('../n100_m200_l15_a4/inst_'+inst+'.txt',"r") as input:
         data = []
