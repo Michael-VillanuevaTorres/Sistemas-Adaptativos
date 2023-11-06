@@ -16,10 +16,11 @@ def objective_function(consensus, data):
 
 
 def aleatory_population(population_size,sequence_length):
+    population=[]
     for _ in range(population_size):
         solution = ''.join(random.choice('ACGT') for _ in range(sequence_length))
-        population_size.append(solution)
-    return population_size
+        population.append(solution)
+    return population
 
 def tournament(population,fitness_values,tournament_size):
     selected_parents = []
@@ -29,12 +30,37 @@ def tournament(population,fitness_values,tournament_size):
         selected_parents.append(population[best_individual])
     return selected_parents
 
-def genetic(population_initial,data, population_size,tournament_size,  sequence_length, max_generations):
+def mutate(consensus, mutation_rate):
+    mutated_position = random.randint(0, len(consensus) - 1)
+    if random.random() < mutation_rate:
+        consensus = consensus[:mutated_position] + random.choice('ACGT') + consensus[mutated_position + 1:]
+    return consensus
 
-    population = population_initial
+def crossover(parent1, parent2):
+    # Elije un punto de corte aleatorio
+    point = random.randint(0, len(parent1))
+
+    # Crea dos descendientes combinando las partes de los padres
+    child1 = parent1[:point] + parent2[point:]
+    child2 = parent2[:point] + parent1[point:]
+
+    return child1, child2
+
+def genetic(data, population_size,tournament_size, max_generations):
+
+    data_tam = len(data)
+    adn_len = len(data[0])
+
+    # Inicialización de la población aleatoria
+    population = aleatory_population(population_size, adn_len)
     best_solution = None
 
+    start_time = time.time()
+
     for generation in range(max_generations):
+        if time.time() - start_time > maxTime:
+            break  # Detener si se alcanza el tiempo máximo
+
         # Evaluación de la población
         fitness_values = [objective_function(consensus, data) for consensus in population]
 
@@ -45,21 +71,26 @@ def genetic(population_initial,data, population_size,tournament_size,  sequence_
         # Actualiza la mejor solución global
         if best_solution is None or fitness_values[current_best_index] < objective_function(best_solution, data):
             best_solution = current_best_solution
-        
+
         # Seleccion
-        parents=tournament(population,fitness_values,tournament_size)
-        # Recombinacion
-        # Mutacion
-        # Remplazo
-        # Repeticion
+        parents = tournament(population, fitness_values, tournament_size)
+        parent1, parent2 = parents  # Dos padres seleccionados
+
+        # Recombinación (implementar)
+
+        # Mutación (implementar)
+
+        # Reemplazo (implementar)
+
+    return best_solution
 
 
 
 if __name__ == "__main__":
     
     # Verifica si se proporciona al menos un argumento
-    if len(sys.argv) < 5:
-        print("Por favor, proporciona este tipo de entrada --> ´python3 genetic.py -i instanciaProblema -t tiempoMaximoSegundos´ .")
+    if len(sys.argv) < 8:
+        print("Por favor, proporciona este tipo de entrada --> ´python3 genetic.py -i instanciaProblema -t tiempoMaximoSegundos -p populationSize´ .")
         exit()
     elif len(sys.argv) == 5:
         # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
@@ -69,13 +100,17 @@ if __name__ == "__main__":
         tIndex = sys.argv.index('-t')
         maxTime = sys.argv[tIndex + 1]
         maxTime = float(maxTime)
+        pIndex = sys.argv.index('-p')
+        population_size = sys.argv[pIndex + 1]
+
     else:
         iIndex = sys.argv.index('-i')
         inst = sys.argv[iIndex + 1]
         tIndex = sys.argv.index('-t')
         maxTime = sys.argv[tIndex + 1]
         maxTime = float(maxTime)
-        
+        pIndex = sys.argv.index('-p')
+        population_size = sys.argv[pIndex + 1]
 
     with open ('../n100_m200_l15_a4/inst_'+inst+'.txt',"r") as input:
         data = []
@@ -86,9 +121,6 @@ if __name__ == "__main__":
     # Datos iniciales Tal vez pedirlos como parametros
     data_tam=len(data)
     adn_len=len(data[1])
-    population_size=data_tam/3
-    print(str(data_tam)+ " " +str(adn_len))
-    initial_population=aleatory_population(population_size,adn_len)
     max_generations = 100
     
 
