@@ -46,7 +46,7 @@ def crossover(parent1, parent2):
 
     return child1, child2
 
-def genetic(data, population_size,tournament_size, max_generations,mutation_rate,):
+def genetic(data, population_size,tournament_size, max_generations,mutation_rate, elite_percentage):
 
     data_tam = len(data)
     adn_len = len(data[0])
@@ -56,7 +56,7 @@ def genetic(data, population_size,tournament_size, max_generations,mutation_rate
     best_solution = None
 
     start_time = time.time()
-
+    best_time = None
     for generation in range(max_generations):
         if time.time() - start_time > maxTime:
             break  # Detener si se alcanza el tiempo máximo
@@ -68,26 +68,37 @@ def genetic(data, population_size,tournament_size, max_generations,mutation_rate
         current_best_index = fitness_values.index(min(fitness_values))
         current_best_solution = population[current_best_index]
 
+        # Encuentra los mejores individuos (élites)
+        elite_count = int(elite_percentage * population_size)
+        elite_indices = sorted(range(len(fitness_values)), key=lambda i: fitness_values[i])[:elite_count]
+        elites = [population[i] for i in elite_indices]
+
         # Actualiza la mejor solución global
         if best_solution is None or fitness_values[current_best_index] < objective_function(best_solution, data):
             best_solution = current_best_solution
+            best_time=time.time()-start_time
 
-        # Seleccion
-        parents = tournament(population, fitness_values, tournament_size)
-        parent1, parent2 = parents  # Dos padres seleccionados
-
-        # Recombinación (implementar)
-        child1,child2 = crossover(parent1, parent2)
-        # Mutación (implementar)
-        mutacion1=mutate(child1,mutation_rate)
-        mutaion2=mutate(child2,mutation_rate)
-        mutation3=mutate(parent1,mutation_rate)
-        mutation4=mutate(parent2,mutation_rate)
+        # Realiza torneos para seleccionar individuos para reemplazo(padres) y saca genera los decendientes
+        
+        candidates_for_replacement = []
+        descendants = []
+        while len(candidates_for_replacement) < population_size - elite_count:
+            parents = tournament(population, fitness_values, tournament_size)
+            parent1,parent2=parents
+            descendants.append(parents)
+            # Recombinación 
+            child1,child2 = crossover(parent1, parent2)
+            # Mutación 
+            mutacion1=mutate(child1,mutation_rate)
+            mutaion2=mutate(child2,mutation_rate)
+            descendants.append(mutacion1,mutaion2)
+    
         # Reemplazo (implementar)
 
+        new_population = elites + descendants
+        population = new_population
 
-
-    return best_solution
+    return best_solution,best_time
 
 
 
