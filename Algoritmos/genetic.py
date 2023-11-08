@@ -46,7 +46,7 @@ def crossover(parent1, parent2):
 
     return child1, child2
 
-def genetic(data, population_size,tournament_size, max_generations):
+def genetic(data, population_size,tournament_size, max_generations,mutation_rate,):
 
     data_tam = len(data)
     adn_len = len(data[0])
@@ -77,10 +77,15 @@ def genetic(data, population_size,tournament_size, max_generations):
         parent1, parent2 = parents  # Dos padres seleccionados
 
         # Recombinación (implementar)
-
+        child1,child2 = crossover(parent1, parent2)
         # Mutación (implementar)
-
+        mutacion1=mutate(child1,mutation_rate)
+        mutaion2=mutate(child2,mutation_rate)
+        mutation3=mutate(parent1,mutation_rate)
+        mutation4=mutate(parent2,mutation_rate)
         # Reemplazo (implementar)
+
+
 
     return best_solution
 
