@@ -1,0 +1,33 @@
+bin/cmsa -i Instances/100-600-064.txt -tlim 600 -th 0.85 -max_age 1000 -sols 30 -cpl_t 532 -d 0.27 -stop 0 -mipemph 5 -ws 0 -as 1
+start file Instances/100-600-064.txt
+value 0.00	time 0.12	gap 100000000000000.00
+value 1.00	time 0.18	gap 9329.10
+value 2.00	time 0.21	gap 4614.55
+value 3.00	time 3.67	gap 3043.03
+value 4.00	time 3.82	gap 2257.27
+value 5.00	time 3.97	gap 1785.82
+value 6.00	time 3.98	gap 1471.52
+value 7.00	time 4.12	gap 1244.11
+value 8.00	time 4.29	gap 1076.10
+value 9.00	time 4.46	gap 945.42
+value 10.00	time 4.47	gap 840.88
+value 11.00	time 4.68	gap 754.53
+value 12.00	time 4.90	gap 683.32
+value 13.00	time 5.10	gap 623.06
+value 14.00	time 5.11	gap 571.42
+value 15.00	time 5.36	gap 526.38
+value 16.00	time 5.58	gap 487.23
+value 17.00	time 5.78	gap 452.69
+value 18.00	time 5.79	gap 421.98
+value 19.00	time 6.21	gap 394.42
+value 20.00	time 6.43	gap 369.70
+value 21.00	time 6.62	gap 347.33
+value 22.00	time 6.65	gap 327.00
+value 23.00	time 7.08	gap 308.38
+value 24.00	time 7.56	gap 291.37
+value 25.00	time 7.61	gap 275.71
+value 26.00	time 12.86	gap 261.05
+value 27.00	time 172.30	gap 244.41
+value 28.00	time 173.23	gap 232.11
+end file Instances/100-600-064.txt
+28.00	173.23

@@ -1,0 +1,31 @@
+bin/cmsa -i Instances/100-300-077.txt -tlim 600 -th 0.85 -max_age 1000 -sols 30 -cpl_t 532 -d 0.27 -stop 0 -mipemph 5 -ws 0 -as 1
+start file Instances/100-300-077.txt
+value 0.00	time 0.05	gap 100000000000000.00
+value 1.00	time 0.08	gap 9330.54
+value 2.00	time 0.09	gap 4615.27
+value 3.00	time 3.29	gap 3043.51
+value 4.00	time 3.31	gap 2257.63
+value 5.00	time 3.31	gap 1786.11
+value 6.00	time 3.32	gap 1471.76
+value 8.00	time 3.33	gap 1078.82
+value 9.00	time 3.33	gap 947.84
+value 11.00	time 3.41	gap 754.61
+value 12.00	time 3.43	gap 683.39
+value 13.00	time 3.45	gap 623.13
+value 14.00	time 3.46	gap 571.48
+value 15.00	time 3.47	gap 526.72
+value 16.00	time 3.48	gap 487.55
+value 17.00	time 3.57	gap 452.39
+value 19.00	time 3.59	gap 394.24
+value 20.00	time 3.61	gap 369.53
+value 22.00	time 3.62	gap 326.84
+value 23.00	time 3.64	gap 308.29
+value 25.00	time 3.65	gap 275.62
+value 26.00	time 3.96	gap 260.99
+value 27.00	time 4.06	gap 247.62
+value 28.00	time 4.28	gap 235.08
+value 29.00	time 14.64	gap 222.23
+value 30.00	time 63.93	gap 210.64
+value 31.00	time 571.38	gap 199.84
+end file Instances/100-300-077.txt
+31.00	571.38

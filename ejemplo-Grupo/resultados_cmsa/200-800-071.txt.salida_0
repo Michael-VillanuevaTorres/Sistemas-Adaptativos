@@ -1,0 +1,32 @@
+bin/cmsa -i Instances/200-800-071.txt -tlim 600 -th 0.85 -max_age 1000 -sols 30 -cpl_t 532 -d 0.27 -stop 0 -mipemph 5 -ws 0 -as 1
+start file Instances/200-800-071.txt
+value 0.00	time 0.25	gap 200000000000000.00
+value 1.00	time 0.48	gap 18381.48
+value 2.00	time 0.55	gap 9140.74
+value 3.00	time 4.12	gap 6060.49
+value 4.00	time 4.22	gap 4520.37
+value 5.00	time 4.63	gap 3596.30
+value 6.00	time 5.08	gap 2972.23
+value 7.00	time 5.26	gap 2533.34
+value 8.00	time 5.58	gap 2204.17
+value 9.00	time 6.24	gap 1945.90
+value 10.00	time 6.45	gap 1741.31
+value 11.00	time 6.60	gap 1573.92
+value 12.00	time 6.86	gap 1434.43
+value 13.00	time 7.90	gap 1315.74
+value 14.00	time 8.28	gap 1214.62
+value 15.00	time 8.71	gap 1126.97
+value 16.00	time 9.83	gap 1050.06
+value 17.00	time 10.11	gap 982.41
+value 18.00	time 12.13	gap 922.19
+value 19.00	time 14.69	gap 868.33
+value 20.00	time 17.01	gap 819.86
+value 21.00	time 18.56	gap 776.06
+value 22.00	time 59.14	gap 736.20
+value 23.00	time 62.61	gap 699.84
+value 24.00	time 64.08	gap 666.52
+value 25.00	time 91.11	gap 635.85
+value 26.00	time 396.27	gap 604.65
+value 27.00	time 397.57	gap 578.55
+end file Instances/200-800-071.txt
+27.00	397.57
