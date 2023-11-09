@@ -46,9 +46,8 @@ def crossover(parent1, parent2):
 
     return child1, child2
 
-def genetic(data, population_size,tournament_size, max_generations,mutation_rate, elite_percentage):
+def genetic(data, population_size,tournament_size,mutation_rate, elite_percentage):
 
-    data_tam = len(data)
     adn_len = len(data[0])
 
     # Inicialización de la población aleatoria
@@ -57,9 +56,8 @@ def genetic(data, population_size,tournament_size, max_generations,mutation_rate
 
     start_time = time.time()
     best_time = None
-    for generation in range(max_generations):
-        if time.time() - start_time > maxTime:
-            break  # Detener si se alcanza el tiempo máximo
+    
+    while time.time() - start_time <= maxTime: 
 
         # Evaluación de la población
         fitness_values = [objective_function(consensus, data) for consensus in population]
@@ -77,7 +75,7 @@ def genetic(data, population_size,tournament_size, max_generations,mutation_rate
         if best_solution is None or fitness_values[current_best_index] < objective_function(best_solution, data):
             best_solution = current_best_solution
             best_time=time.time()-start_time
-
+            print (best_solution)
         # Realiza torneos para seleccionar individuos para reemplazo(padres) y saca genera los decendientes
         
         candidates_for_replacement = []
@@ -91,24 +89,24 @@ def genetic(data, population_size,tournament_size, max_generations,mutation_rate
             # Mutación 
             mutacion1=mutate(child1,mutation_rate)
             mutaion2=mutate(child2,mutation_rate)
-            descendants.append(mutacion1,mutaion2)
+            descendants.extend([mutacion1, mutaion2])
     
         # Reemplazo (implementar)
 
         new_population = elites + descendants
         population = new_population
 
-    return best_solution,best_time
+        return best_solution,best_time
 
 
 
 if __name__ == "__main__":
     
     # Verifica si se proporciona al menos un argumento
-    if len(sys.argv) < 8:
+    if len(sys.argv) < 7:
         print("Por favor, proporciona este tipo de entrada --> ´python3 genetic.py -i instanciaProblema -t tiempoMaximoSegundos -p populationSize´ .")
         exit()
-    elif len(sys.argv) == 5:
+    elif len(sys.argv) == 8:
         # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
         # El tercer argumento (sys.argv[2]) es el nivel de determinismo
         iIndex = sys.argv.index('-i')
@@ -118,6 +116,7 @@ if __name__ == "__main__":
         maxTime = float(maxTime)
         pIndex = sys.argv.index('-p')
         population_size = sys.argv[pIndex + 1]
+        population_size = int(population_size)
 
     else:
         iIndex = sys.argv.index('-i')
@@ -127,8 +126,10 @@ if __name__ == "__main__":
         maxTime = float(maxTime)
         pIndex = sys.argv.index('-p')
         population_size = sys.argv[pIndex + 1]
+        population_size = int(population_size)
 
-    with open ('../n100_m200_l15_a4/inst_'+inst+'.txt',"r") as input:
+
+    with open ('../n100_m200_l15_a4/'+inst+'.txt',"r") as input:
         data = []
         for line in input:
             line =line.replace("\n","")
@@ -137,7 +138,11 @@ if __name__ == "__main__":
     # Datos iniciales Tal vez pedirlos como parametros
     data_tam=len(data)
     adn_len=len(data[1])
-    max_generations = 100
+    tournament_size=100
+    mutation_rate=0.4
+    elite_percentage=0.3
+    result=genetic(data, population_size,tournament_size,mutation_rate, elite_percentage)
+    print(result)
     
 
 
