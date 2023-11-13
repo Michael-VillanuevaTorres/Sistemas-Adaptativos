@@ -14,21 +14,12 @@ def objective_function(consensus, data):
         distance+=different_letter**2
     return distance
 
-
 def aleatory_population(population_size,sequence_length):
     population=[]
-    for _ in range(population_size):
-        solution = ''.join(random.choice('ACGT') for _ in range(sequence_length))
+    for i in range(population_size):
+        solution = ''.join(random.choice('ACGT') for j in range(sequence_length))
         population.append(solution)
     return population
-
-def tournament(population,fitness_values,tournament_size):
-    selected_parents = []
-    while len(selected_parents) < 2:
-        tournament = random.sample(range(len(population)), tournament_size)        
-        best_individual = min(tournament, key=lambda i: fitness_values[i])
-        selected_parents.append(population[best_individual])
-    return selected_parents
 
 def mutate(consensus, mutation_rate):
     mutated_position = random.randint(0, len(consensus) - 1)
@@ -46,89 +37,117 @@ def crossover(parent1, parent2):
 
     return child1, child2
 
-def genetic(data, population_size,tournament_size,mutation_rate, elite_percentage):
+def genetic(data, max_time, population_size, mutation_rate, elite_percentage):
 
     adn_len = len(data[0])
 
-    # Inicialización de la población aleatoria
+    # Inicializacion de la población aleatoria
     population = aleatory_population(population_size, adn_len)
-    best_solution = None
+
+    # Evaluacion de la poblacion
+    fitness_values = [objective_function(consensus, data) for consensus in population]
+
+    # Encuentra la mejor solución en la primera generacion
+    current_best_index = fitness_values.index(min(fitness_values))
+    current_best_solution = population[current_best_index]
+
+    best_solution = current_best_solution
+    best_fitness = fitness_values[current_best_index]
 
     start_time = time.time()
-    best_time = None
-    
-    while time.time() - start_time <= maxTime: 
-
-        # Evaluación de la población
-        fitness_values = [objective_function(consensus, data) for consensus in population]
-
-        # Encuentra la mejor solución en la generación actual
-        current_best_index = fitness_values.index(min(fitness_values))
-        current_best_solution = population[current_best_index]
-
+    while time.time() - start_time <= max_time:
         # Encuentra los mejores individuos (élites)
         elite_count = int(elite_percentage * population_size)
         elite_indices = sorted(range(len(fitness_values)), key=lambda i: fitness_values[i])[:elite_count]
-        elites = [population[i] for i in elite_indices]
+        elite = [population[i] for i in elite_indices]
 
-        # Actualiza la mejor solución global
-        if best_solution is None or fitness_values[current_best_index] < objective_function(best_solution, data):
-            best_solution = current_best_solution
-            best_time=time.time()-start_time
-            print (best_solution)
+        # Obtener el resto de la población
+        non_elite = list(filter(lambda i: i not in elite_indices, range(population_size)))
+        rest_of_population = [population[i] for i in non_elite]
+
         # Realiza torneos para seleccionar individuos para reemplazo(padres) y saca genera los decendientes
-        
-        candidates_for_replacement = []
         descendants = []
-        while len(candidates_for_replacement) < population_size - elite_count:
-            parents = tournament(population, fitness_values, tournament_size)
-            parent1,parent2=parents
-            descendants.append(parents)
-            # Recombinación 
-            child1,child2 = crossover(parent1, parent2)
-            # Mutación 
-            mutacion1=mutate(child1,mutation_rate)
-            mutaion2=mutate(child2,mutation_rate)
-            descendants.extend([mutacion1, mutaion2])
     
-        # Reemplazo (implementar)
+        # Cruzamos a la elite
+        while len(elite) > 0:
+            # Seleccionamos padres aleatorios de la elite
+            parent1_index = random.randint(0, len(elite) - 1)
+            parent2_index = random.randint(0, len(elite) - 1)
+            while parent2_index == parent1_index:
+                parent2_index = random.randint(0, len(elite) - 1)
 
-        new_population = elites + descendants
+            # Cruza
+            child1,child2 = crossover(elite[parent1_index], elite[parent2_index])
+            descendants.extend([child1, child2])
+
+            elite.pop(parent1_index)
+            if parent1_index < parent2_index:
+                elite.pop(parent2_index - 1)
+            else:
+                elite.pop(parent2_index)
+
+        # Mutamos poblacion no elite para reciclar en siguiente generacion
+        for i in range(len(rest_of_population)):
+            mutate(rest_of_population[i], mutation_rate)
+
+        # Generamos nueva generacion
+        new_population = descendants + rest_of_population
+
+        # Evaluacion de la nueva poblacion
+        fitness_values = [objective_function(consensus, data) for consensus in new_population]
+
+        # Encuentra la mejor solución en la  actual
+        current_best_index = fitness_values.index(min(fitness_values))
+        current_best_solution = new_population[current_best_index]
+
+        # Actualiza la mejor solucion global
+        if fitness_values[current_best_index] < objective_function(best_solution, data):
+            best_solution = current_best_solution
+            best_fitness = fitness_values[current_best_index]
+
+        # Actualiza la nueva generacion
         population = new_population
-
-        return best_solution,best_time
-
+        
+    return best_solution, best_fitness
 
 
 if __name__ == "__main__":
-    
-    # Verifica si se proporciona al menos un argumento
-    if len(sys.argv) < 7:
-        print("Por favor, proporciona este tipo de entrada --> ´python3 genetic.py -i instanciaProblema -t tiempoMaximoSegundos -p populationSize´ .")
+    try:
+        inst_index = sys.argv.index('-i')
+        inst = sys.argv[inst_index + 1]
+    except:
+        print('Debes ingresar una instancia')
         exit()
-    elif len(sys.argv) == 8:
-        # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
-        # El tercer argumento (sys.argv[2]) es el nivel de determinismo
-        iIndex = sys.argv.index('-i')
-        inst = sys.argv[iIndex + 1]
-        tIndex = sys.argv.index('-t')
-        maxTime = sys.argv[tIndex + 1]
-        maxTime = float(maxTime)
-        pIndex = sys.argv.index('-p')
-        population_size = sys.argv[pIndex + 1]
+
+    try:
+        maxtime_index = sys.argv.index('-t')
+        max_time = sys.argv[maxtime_index + 1]
+        max_time = float(max_time)
+    except:
+        max_time = float(60)
+
+    try:
+        population_size_index = sys.argv.index('-p')
+        population_size = sys.argv[population_size_index + 1]
         population_size = int(population_size)
+    except:
+        population_size = int(100)
 
-    else:
-        iIndex = sys.argv.index('-i')
-        inst = sys.argv[iIndex + 1]
-        tIndex = sys.argv.index('-t')
-        maxTime = sys.argv[tIndex + 1]
-        maxTime = float(maxTime)
-        pIndex = sys.argv.index('-p')
-        population_size = sys.argv[pIndex + 1]
-        population_size = int(population_size)
+    try:
+        mutation_rate_index = sys.argv.index('-m')
+        mutation_rate = sys.argv[mutation_rate_index + 1]
+        mutation_rate = float(mutation_rate)
+    except:
+        mutation_rate = 0.4
 
-
+    try:
+        elite_percentage_index = sys.argv.index('-e')
+        elite_percentage = sys.argv[elite_percentage_index + 1]
+        elite_percentage = float(elite_percentage)
+    except:
+        elite_percentage = 0.5
+    
+    
     with open ('../n100_m200_l15_a4/'+inst+'.txt',"r") as input:
         data = []
         for line in input:
@@ -136,13 +155,6 @@ if __name__ == "__main__":
             data.append(line)
 
     # Datos iniciales Tal vez pedirlos como parametros
-    data_tam=len(data)
-    adn_len=len(data[1])
-    tournament_size=100
-    mutation_rate=0.4
-    elite_percentage=0.3
-    result=genetic(data, population_size,tournament_size,mutation_rate, elite_percentage)
-    print(result)
+    best_solution, best_fitness = genetic(data, max_time, population_size, mutation_rate, elite_percentage)
+    print(best_fitness)
     
-
-
