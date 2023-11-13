@@ -1,7 +1,6 @@
 import random
 import time
 import sys
-import math
 
 def objective_function(consensus, data):
     distance=0
