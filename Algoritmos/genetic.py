@@ -68,7 +68,7 @@ def genetic(data, max_time, population_size, mutation_rate, elite_percentage):
         descendants = []
     
         # Cruzamos a la elite
-        while len(elite) > 0:
+        while len(elite) > 1:
             # Seleccionamos padres aleatorios de la elite
             parent1_index = random.randint(0, len(elite) - 1)
             parent2_index = random.randint(0, len(elite) - 1)
@@ -84,6 +84,9 @@ def genetic(data, max_time, population_size, mutation_rate, elite_percentage):
                 elite.pop(parent2_index - 1)
             else:
                 elite.pop(parent2_index)
+
+        if len(elite) > 0:
+            rest_of_population += elite
 
         # Mutamos poblacion no elite para reciclar en siguiente generacion
         for i in range(len(rest_of_population)):
@@ -130,21 +133,21 @@ if __name__ == "__main__":
         population_size = sys.argv[population_size_index + 1]
         population_size = int(population_size)
     except:
-        population_size = int(100)
+        population_size = int(30)
 
     try:
         mutation_rate_index = sys.argv.index('-m')
         mutation_rate = sys.argv[mutation_rate_index + 1]
         mutation_rate = float(mutation_rate)
     except:
-        mutation_rate = 0.4
+        mutation_rate = 0.5
 
     try:
         elite_percentage_index = sys.argv.index('-e')
         elite_percentage = sys.argv[elite_percentage_index + 1]
         elite_percentage = float(elite_percentage)
     except:
-        elite_percentage = 0.5
+        elite_percentage = 0.2
     
     
     with open ('../n100_m200_l15_a4/'+inst+'.txt',"r") as input:
