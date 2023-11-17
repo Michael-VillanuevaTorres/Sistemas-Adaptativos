@@ -40,6 +40,8 @@ def genetic(data, max_time, population_size, mutation_rate, elite_percentage):
 
     adn_len = len(data[0])
 
+    best_time = 0
+
     # Inicializacion de la población aleatoria
     population = aleatory_population(population_size, adn_len)
 
@@ -98,28 +100,29 @@ def genetic(data, max_time, population_size, mutation_rate, elite_percentage):
         # Evaluacion de la nueva poblacion
         fitness_values = [objective_function(consensus, data) for consensus in new_population]
 
-        # Encuentra la mejor solución en la  actual
+        # Encuentra la mejor solución en actual
         current_best_index = fitness_values.index(min(fitness_values))
         current_best_solution = new_population[current_best_index]
 
         # Actualiza la mejor solucion global
         if fitness_values[current_best_index] < objective_function(best_solution, data):
+            best_time += (time.time() - start_time)
             best_solution = current_best_solution
             best_fitness = fitness_values[current_best_index]
 
         # Actualiza la nueva generacion
         population = new_population
-        
-    return best_solution, best_fitness
+    
+    return best_solution, best_fitness, best_time
 
 
 if __name__ == "__main__":
-    try:
-        inst_index = sys.argv.index('-i')
-        inst = sys.argv[inst_index + 1]
-    except:
-        print('Debes ingresar una instancia')
-        exit()
+    # try:
+    #     inst_index = sys.argv.index('-i')
+    #     inst = sys.argv[inst_index + 1]
+    # except:
+    #     print('Debes ingresar una instancia')
+    #     exit()
 
     try:
         maxtime_index = sys.argv.index('-t')
@@ -149,14 +152,22 @@ if __name__ == "__main__":
     except:
         elite_percentage = 0.2
     
-    
-    with open ('../n100_m200_l15_a4/'+inst+'.txt',"r") as input:
-        data = []
-        for line in input:
-            line =line.replace("\n","")
-            data.append(line)
+    with open('resultados_500_100.txt', 'w') as output:
+        tiempo_promedio = 0
+        fitness_promedio = 0
+        for inst in range(100):
+            data = []
+            with open (f'../n100_m200_l15_a4/inst_1000_500_4_{inst}.txt',"r") as input:
+                for line in input:
+                    line =line.replace("\n","")
+                    data.append(line)
 
-    # Datos iniciales Tal vez pedirlos como parametros
-    best_solution, best_fitness = genetic(data, max_time, population_size, mutation_rate, elite_percentage)
-    print(best_fitness)
-    
+            # Datos iniciales Tal vez pedirlos como parametros
+            best_solution, best_fitness, best_time = genetic(data, max_time, population_size, mutation_rate, elite_percentage)
+            tiempo_promedio += best_time
+            fitness_promedio += best_fitness
+            output.write(f'{inst} 1000 500 {best_fitness}\n')
+        
+        tiempo_promedio /= 100
+        fitness_promedio /= 100
+        output.write(f'promedio 1000 500 {fitness_promedio} {tiempo_promedio} s\n')
