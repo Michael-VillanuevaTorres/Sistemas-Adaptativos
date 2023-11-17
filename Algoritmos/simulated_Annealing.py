@@ -45,6 +45,8 @@ def simulated(data,initial_temperature,cooling_rate,maxTime):
 
     start = time.time()
 
+    best_last_time = maxTime
+
     while time.time() - start <= maxTime: 
         # Genera una solución vecina perturbando la solución actual
         neighbor = list(consensus)
@@ -66,47 +68,37 @@ def simulated(data,initial_temperature,cooling_rate,maxTime):
         if current_distance < best_distance:
             best_consensus = consensus
             best_distance = current_distance
+            best_last_time = time.time() - start
         
         # Reduce la temperatura 
         temperature *= cooling_rate
  
-    return greedy_distance,best_consensus, best_distance
+    return greedy_distance,best_consensus, best_distance, best_last_time
 
     
 if __name__ == "__main__":
+
     initial_temperature = 10000.0
     cooling_rate = 0.95
-    
-    # Verifica si se proporciona al menos un argumento
-    if len(sys.argv) < 5:
-        print("Por favor, proporciona este tipo de entrada --> ´python3 simulated_Annealing.py -i instanciaProblema -t tiempoMaximoSegundos´ .")
-        exit()
-    elif len(sys.argv) == 5:
-        # El segundo argumento (sys.argv[1]) es el nombre del archivo con la entrada
-        # El tercer argumento (sys.argv[2]) es el nivel de determinismo
-        iIndex = sys.argv.index('-i')
-        inst = sys.argv[iIndex + 1]
-        tIndex = sys.argv.index('-t')
-        maxTime = sys.argv[tIndex + 1]
-        maxTime = float(maxTime)
-    else:
-        iIndex = sys.argv.index('-i')
-        inst = sys.argv[iIndex + 1]
-        tIndex = sys.argv.index('-t')
-        maxTime = sys.argv[tIndex + 1]
-        maxTime = float(maxTime)
-        itIndex = sys.argv.index('-it')
-        initial_temperature = float(sys.argv[itIndex + 1])
-        crIndex = sys.argv.index('-cr')
-        cooling_rate = float(sys.argv[crIndex + 1])
+    maxTime=60
+
         
+    with open ("greedydatos1000.txt","w") as output:
+        output.write("inst    m     l     greedy      mh")
+        
+        mh_time = 0
+        for inst in range(100):
+                    
+            with open ('../instancias1/inst_200_15_4_'+str(inst)+".txt","r") as input:
+                data = []
+                for line in input:
+                    line =line.replace("\n","")
+                    data.append(line)
 
-    with open ('../n100_m200_l15_a4/inst_'+inst+'.txt',"r") as input:
-        data = []
-        for line in input:
-            line =line.replace("\n","")
-            data.append(line)
+            greedy_distance,best_consensus, best_distance,best_last_time=simulated(data,initial_temperature,cooling_rate,maxTime)
 
-    greedy_distance,best_consensus, best_distance=simulated(data,initial_temperature,cooling_rate,maxTime)
-
-    print(str(best_distance))  
+            print(str(inst)+"  "+str(greedy_distance)+"   "+str(best_distance)+"")  
+            output.write(str(inst)+" 200 400   "+str(greedy_distance)+"   "+str(best_distance)+"\n")
+            mh_time+=best_last_time
+        mh_time /= 100
+        print('Mh Promedio = ' + str(mh_time) + 's')

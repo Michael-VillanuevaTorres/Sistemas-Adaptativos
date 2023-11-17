@@ -18,7 +18,7 @@ else:
 
 
 
-with open ('../n100_m200_l15_a4/inst_200_15_4_'+str(inst)+".txt","r") as input:
+with open ('../n100_m200_l15_a4/'+str(inst)+".txt","r") as input:
     data = []
     for line in input:
         line =line.replace("\n","")
