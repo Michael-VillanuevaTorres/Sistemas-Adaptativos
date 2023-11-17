@@ -152,7 +152,7 @@ if __name__ == "__main__":
     except:
         elite_percentage = 0.2
     
-    with open('resultados_500_100.txt', 'w') as output:
+    with open('resultados_1000_500.txt', 'w') as output:
         tiempo_promedio = 0
         fitness_promedio = 0
         for inst in range(100):
