@@ -152,12 +152,12 @@ if __name__ == "__main__":
     except:
         elite_percentage = 0.2
     
-    with open('resultados_1000_500.txt', 'w') as output:
+    with open('resultados_200_15.txt', 'w') as output:
         tiempo_promedio = 0
         fitness_promedio = 0
         for inst in range(100):
             data = []
-            with open (f'../n100_m200_l15_a4/inst_1000_500_4_{inst}.txt',"r") as input:
+            with open (f'../instancias1/inst_200_15_4_{inst}.txt',"r") as input:
                 for line in input:
                     line =line.replace("\n","")
                     data.append(line)
@@ -166,8 +166,8 @@ if __name__ == "__main__":
             best_solution, best_fitness, best_time = genetic(data, max_time, population_size, mutation_rate, elite_percentage)
             tiempo_promedio += best_time
             fitness_promedio += best_fitness
-            output.write(f'{inst} 1000 500 {best_fitness}\n')
+            output.write(f'{inst} 200 15 {best_fitness}\n')
         
         tiempo_promedio /= 100
         fitness_promedio /= 100
-        output.write(f'promedio 1000 500 {fitness_promedio} {tiempo_promedio} s\n')
+        output.write(f'promedio 200 15 {fitness_promedio} {tiempo_promedio} s\n')
