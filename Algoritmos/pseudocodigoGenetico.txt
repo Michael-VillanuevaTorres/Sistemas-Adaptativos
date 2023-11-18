@@ -1,0 +1,12 @@
+Algoritmo genético principal:
+- Inicializa la población aleatoria.
+- Evalúa la población inicial.
+- Encuentra la mejor solución en la primera generación.
+- Mientras no se alcance el tiempo máximo:
+  - Selecciona a los mejores individuos (élites).
+  - Realiza cruces entre la élite para generar los descendientes.
+  - Mutación de la población no élite para reciclar en la siguiente generación.
+  - Genera una nueva generación.
+  - Evalúa la nueva población.
+  - Encuentra la mejor solución en la generación actual.
+  - Actualiza la mejor solución global.

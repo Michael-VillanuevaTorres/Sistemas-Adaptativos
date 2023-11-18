@@ -17,7 +17,6 @@ else:
         n_determinist = 0.9 # Valor predeterminado
 
 
-
 with open ('../n100_m200_l15_a4/'+str(inst)+".txt","r") as input:
     data = []
     for line in input:
