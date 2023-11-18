@@ -1,0 +1,4 @@
+# Best configurations as commandlines (first number is the configuration ID; same order as above):
+12   -p 30 -m 0.5 -e 0.2
+51   -p 30 -m 0.8 -e 0.2
+105  -p 50 -m 0.3 -e 0.3
