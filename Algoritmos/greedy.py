@@ -4,7 +4,7 @@ import sys
 
 # Verifica si se proporciona al menos un argumento
 if len(sys.argv) < 2:
-    print("Por favor, proporciona el numero de la entrada, entre 0 y 99.")
+    print("Por favor, proporciona el numero de la entrada.")
     exit()
 else:
     # El primer argumento (sys.argv[0]) es el nombre del script
