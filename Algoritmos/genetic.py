@@ -117,12 +117,12 @@ def genetic(data, max_time, population_size, mutation_rate, elite_percentage):
 
 
 if __name__ == "__main__":
-    # try:
-    #     inst_index = sys.argv.index('-i')
-    #     inst = sys.argv[inst_index + 1]
-    # except:
-    #     print('Debes ingresar una instancia')
-    #     exit()
+    try:
+         inst_index = sys.argv.index('-i')
+         inst = sys.argv[inst_index + 1]
+    except:
+         print('Debes ingresar una instancia')
+         exit()
 
     try:
         maxtime_index = sys.argv.index('-t')
@@ -152,22 +152,14 @@ if __name__ == "__main__":
     except:
         elite_percentage = 0.2
     
-    with open('resultados_200_15.txt', 'w') as output:
-        tiempo_promedio = 0
-        fitness_promedio = 0
-        for inst in range(100):
-            data = []
-            with open (f'../instancias1/inst_200_15_4_{inst}.txt',"r") as input:
-                for line in input:
-                    line =line.replace("\n","")
-                    data.append(line)
+    
+    data = []
+    with open (f'../instancias1/inst_200_15_4_{inst}.txt',"r") as input:
+        for line in input:
+            line =line.replace("\n","")
+            data.append(line)
 
-            # Datos iniciales Tal vez pedirlos como parametros
-            best_solution, best_fitness, best_time = genetic(data, max_time, population_size, mutation_rate, elite_percentage)
-            tiempo_promedio += best_time
-            fitness_promedio += best_fitness
-            output.write(f'{inst} 200 15 {best_fitness}\n')
-        
-        tiempo_promedio /= 100
-        fitness_promedio /= 100
-        output.write(f'promedio 200 15 {fitness_promedio} {tiempo_promedio} s\n')
+    # Datos iniciales Tal vez pedirlos como parametros
+    best_solution, best_fitness, best_time = genetic(data, max_time, population_size, mutation_rate, elite_percentage)
+    
+    print(best_fitness)
