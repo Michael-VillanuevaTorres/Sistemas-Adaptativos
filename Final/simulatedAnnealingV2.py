@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import random
 import time
 import sys
@@ -45,7 +47,7 @@ def p_greedy(data, n_determinist):
 
 def simulated(data, n_determinist, initial_temperature, cooling_rate, max_time):
     start = time.time()
-    
+    best_last_time = max_time
     consensus = p_greedy(data, n_determinist)
     current_distance = objective_function(consensus, data)
     best_consensus = consensus
@@ -66,19 +68,23 @@ def simulated(data, n_determinist, initial_temperature, cooling_rate, max_time):
         delta = neighbor_distance - current_distance
         
         # Decide si aceptar la solución vecina
-        if delta < 0 or random.random() < math.exp(-delta / temperature):
-            consensus = neighbor
-            current_distance = neighbor_distance
-        
+        if temperature!=0 :
+            if delta < 0 or random.random() < math.exp(-delta / temperature):
+                consensus = neighbor
+                current_distance = neighbor_distance
+        else:
+            if delta < 0 :
+                consensus = neighbor
+                current_distance = neighbor_distance
         # Actualiza la mejor solución si es necesario
         if current_distance < best_distance:
             best_consensus = consensus
             best_distance = current_distance
-        
+            best_last_time = time.time() - start
         # Reduce la temperatura 
         temperature *= cooling_rate
  
-    return best_consensus, best_distance
+    return best_consensus, best_distance, best_last_time
 
 
 if __name__ == "__main__":
@@ -117,12 +123,28 @@ if __name__ == "__main__":
     except:
         cooling_rate = 0.95
 
-    data = []
-    with open (f'../n100_m200_l15_a4/{inst}',"r") as input:
-        for line in input:
-            line =line.replace("\n","")
-            data.append(line)
+    n=100
+    with open('resultados_500.txt', 'w') as output:
+        tiempo_promedio = 0
+        fitness_promedio = 0
+        output.write("inst    m     l     mh")
+        mh_time = 0
+        distance_prom=0
+        for aux in range(2):
+            for inst in range(100):
+                data = []
+                with open (f'../n100_m200_l15_a4/inst_500_{n}_4_{inst}',"r") as input:
+                    for line in input:
+                        line =line.replace("\n","")
+                        data.append(line)
 
-    best_consensus, best_distance = simulated(data, n_determinist, initial_temperature, cooling_rate, max_time)
-
-    print(f'{best_distance}')
+                best_consensus, best_distance, best_last_time = simulated(data, n_determinist, initial_temperature, cooling_rate, max_time)
+            n=n+200
+            print(f'{best_distance}')
+            output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
+            mh_time+=best_last_time
+            distance_prom=distance_prom+best_distance
+        mh_time /= 100
+        distance_prom/=100
+        print('Tiempo Mh Promedio = ' + str(mh_time) + 's')
+        print('Distancia Mh Promedio = ' + str(distance_prom) + 's')
