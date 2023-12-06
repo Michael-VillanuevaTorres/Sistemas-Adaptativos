@@ -126,7 +126,7 @@ if __name__ == "__main__":
     cooling_rate = 0.6
 
 
-    genetic_probality = 0.1
+    genetic_probability = 0.1
 
     n=100
     with open('resultados_500_simulatedG.txt', 'w') as output:
@@ -142,7 +142,7 @@ if __name__ == "__main__":
                     for line in input:
                         line =line.replace("\n","")
                         data.append(line)
-                best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time)
+                best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time,genetic_probability)
                 print(best_distance)
                 
             n=n+200

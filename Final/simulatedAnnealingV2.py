@@ -16,39 +16,29 @@ def objective_function(consensus, data):
         distance += different_letter ** 2
     return distance
 
-def p_greedy(data, n_determinist):
+def greedy(data):
     dict = [] 
-    ans = ''
-    for i in range(len(data[0])):
-        dict.append({'A': 0, 'C': 0, 'T': 0, 'G': 0})
-        for line in data:
-            dict[i][line[i]] += 1
+    ans = ''    
+    for i in range(len(data[0])): ## i desde 0 a len de cada linea en data, en este caso 15
+        dict.append({'A': 0, 'C': 0, 'T': 0, 'G': 0}) ## Dentro de la lista dict genera un mapa con { , , }
+        for line in data: ## Dentro de cada linea de data
+            dict[i][line[i]] += 1  ## dentro de cada dict (15 dict en este caso)[line[i] igual va desde cada letra dentro de una linea aumentado esa letra en la dict] 
         max_val = max(dict[i].values())
-
-        candidates_max = []
-        candidates_aleatorios = []
+        candidates = []
         for protein in dict[i]:
             if dict[i][protein] == max_val:
-                candidates_max.append(protein)
-            else:
-                candidates_aleatorios.append(protein)
-                
-        numero_aleatorio = random.random()
-        if numero_aleatorio > n_determinist and len(candidates_aleatorios) != 0:
-            selected = random.randint(0, len(candidates_aleatorios) - 1)
-            ans += candidates_aleatorios[selected]
-        else:
-            selected = random.randint(0, len(candidates_max) - 1)
-            ans += candidates_max[selected]
+                candidates.append(protein)
+        selected = random.randint(0, len(candidates) - 1)
+        ans += candidates[selected]
 
     result=ans
 
-    return result
+    return (result)
 
-def simulated(data, n_determinist, initial_temperature, cooling_rate, max_time):
+def simulated(data, initial_temperature, cooling_rate, max_time):
     start = time.time()
     best_last_time = max_time
-    consensus = p_greedy(data, n_determinist)
+    consensus = greedy(data)
     current_distance = objective_function(consensus, data)
     best_consensus = consensus
     best_distance = current_distance
@@ -88,12 +78,6 @@ def simulated(data, n_determinist, initial_temperature, cooling_rate, max_time):
 
 
 if __name__ == "__main__":
-    try:
-        inst_index = sys.argv.index('-i')
-        inst = sys.argv[inst_index + 1]
-    except:
-        print('Debes ingresar una instancia')
-        exit()
 
     try:
         maxtime_index = sys.argv.index('-t')
@@ -102,26 +86,20 @@ if __name__ == "__main__":
     except:
         max_time = float(60)
 
-    try:
-        n_determinist_index = sys.argv.index('-d')
-        n_determinist = sys.argv[n_determinist_index + 1]
-        n_determinist = float(n_determinist)
-    except:
-        n_determinist = 0.9
 
     try:
         initial_temperature_index = sys.argv.index('-it')
         initial_temperature = sys.argv[initial_temperature_index + 1]
         initial_temperature = float(initial_temperature)
     except:
-        initial_temperature = 10000.0
+        initial_temperature = 9000.0
 
     try:
         cooling_rate_index = sys.argv.index('-c')
         cooling_rate = sys.argv[cooling_rate_index + 1]
         cooling_rate = float(cooling_rate)
     except:
-        cooling_rate = 0.95
+        cooling_rate = 0.9
 
     n=100
     with open('resultados_500.txt', 'w') as output:
@@ -138,7 +116,7 @@ if __name__ == "__main__":
                         line =line.replace("\n","")
                         data.append(line)
 
-                best_consensus, best_distance, best_last_time = simulated(data, n_determinist, initial_temperature, cooling_rate, max_time)
+                best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time)
             n=n+200
             print(f'{best_distance}')
             output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
