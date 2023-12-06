@@ -133,7 +133,7 @@ if __name__ == "__main__":
         for aux in range(2):
             for inst in range(100):
                 data = []
-                with open (f'../n100_m200_l15_a4/inst_500_{n}_4_{inst}',"r") as input:
+                with open (f'../n100_m200_l15_a4/inst_500_'+str(n)+'_4_'+str(inst)+'.txt',"r") as input:
                     for line in input:
                         line =line.replace("\n","")
                         data.append(line)
