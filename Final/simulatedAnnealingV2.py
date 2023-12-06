@@ -117,12 +117,13 @@ if __name__ == "__main__":
                         data.append(line)
 
                 best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time)
+                print(f'{best_distance}')
+                output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
+                mh_time+=best_last_time
+                distance_prom=distance_prom+best_distance
             n=n+200
-            print(f'{best_distance}')
-            output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
-            mh_time+=best_last_time
-            distance_prom=distance_prom+best_distance
-        mh_time /= 100
-        distance_prom/=100
-        print('Tiempo Mh Promedio = ' + str(mh_time) + 's')
-        print('Distancia Mh Promedio = ' + str(distance_prom) + 's')
+            
+            mh_time /= 100
+            distance_prom/=100
+            print('Tiempo Mh Promedio = ' + str(mh_time) + 's')
+            print('Distancia Mh Promedio = ' + str(distance_prom) + 's')
