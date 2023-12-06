@@ -120,13 +120,13 @@ if __name__ == "__main__":
 
     max_time = float(60)
 
-    initial_temperature = 14000
+    initial_temperature = 13000
 
 
     cooling_rate = 0.6
 
 
-    genetic_probability = 0.1
+    genetic_probability = 0.2
 
     n=100
     with open('resultados_500_simulatedG.txt', 'w') as output:
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         output.write("inst    m     l     mh")
         mh_time = 0
         distance_prom=0
-        for aux in range(2):
+        for aux in range(3):
             for inst in range(100):
                 data = []
                 with open (f'../n100_m200_l15_a4/inst_500_'+str(n)+'_4_'+str(inst)+'.txt',"r") as input:

@@ -108,7 +108,7 @@ if __name__ == "__main__":
         output.write("inst    m     l     mh")
         mh_time = 0
         distance_prom=0
-        for aux in range(2):
+        for aux in range(3):
             for inst in range(100):
                 data = []
                 with open (f'../n100_m200_l15_a4/inst_500_'+str(n)+'_4_'+str(inst)+'.txt',"r") as input:
@@ -117,7 +117,7 @@ if __name__ == "__main__":
                         data.append(line)
 
                 best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time)
-                print(f'{best_distance}')
+                print(best_distance)
                 output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
                 mh_time+=best_last_time
                 distance_prom=distance_prom+best_distance
