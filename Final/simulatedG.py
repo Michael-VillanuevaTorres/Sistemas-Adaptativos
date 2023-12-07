@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import random
 import time
 import sys
@@ -129,27 +127,25 @@ if __name__ == "__main__":
     genetic_probability = 0.2
 
     n=100
-    with open('resultados_500_simulatedG.txt', 'w') as output:
-        tiempo_promedio = 0
-        fitness_promedio = 0
-        output.write("inst    m     l     mh")
-        mh_time = 0
-        distance_prom=0
+    with open('resultados_1000_simulatedG.txt', 'w') as output:
+        output.write("inst    m     l     mh\n")        
         for aux in range(3):
+            mh_time = 0
+            distance_prom=0
             for inst in range(100):
                 data = []
-                with open (f'../n100_m200_l15_a4/inst_500_'+str(n)+'_4_'+str(inst)+'.txt',"r") as input:
+                with open (f'../n100_m200_l15_a4/inst_1000_'+str(n)+'_4_'+str(inst)+'.txt',"r") as input:
                     for line in input:
                         line =line.replace("\n","")
                         data.append(line)
                 best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time,genetic_probability)
                 print(best_distance)
-                output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
+                output.write(str(inst)+" 1000   "+str(n)+"   "+str(best_distance)+"\n")
                 mh_time+=best_last_time
                 distance_prom=distance_prom+best_distance
                 
             n=n+200
             mh_time /= 100
             distance_prom/=100
-            print('Tiempo Mh Promedio = ' + str(mh_time) + 's')
-            print('Distancia Mh Promedio = ' + str(distance_prom) + 's')
+            print(f'Tiempo Mh Promedio = {mh_time} s')
+            print(f'Distancia Mh Promedio = {distance_prom}')
