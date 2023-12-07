@@ -1,0 +1,101 @@
+FunciónObjetivo(consenso, datos)
+    distancia = 0
+    Para cada línea en datos
+        letras_diferentes = 0
+        Para cada índice i en rango(0, longitud(consenso))
+            Si consenso[i] ≠ línea[i]
+                letras_diferentes += 1
+        distancia += letras_diferentes^2
+    return  distancia
+
+Crossover(parent1, parent2):
+    # Vemos donde realizaremos el cruce
+    crossover_point = aleatorio(1, longitud(parent1) - 1)
+    # Genera hijos combinando las partes de los padres
+    child1 = parent1[:crossover_point] + parent2[crossover_point:]
+    child2 = parent2[:crossover_point] + parent1[crossover_point:]
+    Devolver child1, child2
+
+Mutate(consenso):
+    # Mutación: Cambia un carácter aleatorio en el individuo
+    mutation_point = aleatorio(0, longitud(consenso) - 1)
+    mutated_consenso[mutation_point] = aleatorio('ACGT')
+    Devolver unir(mutated_consensol)
+
+
+
+
+
+
+
+
+
+
+
+
+Generate_Neighbor(consenso, data, genetic_probability):
+    Si aleatorio(0, 1) < genetic_probability:
+        # Se busca el vecino aplicando secciones del algoritmo genetico
+        parent1 = consenso
+        parent2 = greedy(data)
+        
+        # Aplicar crossover
+        child1, child2 = crossover(parent1, parent2)
+        
+        # Aplicar mutación a los hijos
+        child1 = mutate(child1)
+        child2 = mutate(child2)
+        
+        # Elegir uno de los hijos aleatoriamente como vecino
+        neighbor = child1 si aleatorio(0, 1) < 0.5 else child2
+    Sino:
+        # Generar vecino perturbando la solución actual
+        neighbor = lista(consenso)
+        index_to_change = aleatorio(0, longitud(neighbor) - 1)
+        neighbor[index_to_change] = aleatorio('ACGT')
+        neighbor = unir(neighbor)
+    Devolver neighbor
+
+Simulated Annealing(datos, temperatura_inicial, tasa_enfriamiento, tiempo_maximo):
+ 
+    inicio = tiempo.actual
+    consenso = Greedy(datos) // Primer consenso es con greedy 
+    distancia_actual = FunciónObjetivo(consenso, datos)
+    mejor_consenso = consenso
+    mejor_distancia = distancia_actual
+    
+    temperatura = temperatura_inicial
+
+    Mientras (tiempo.actual - inicio) <= tiempo_maximo
+        # Genera una solución vecina modificando la solución actual
+        vecino = (consenso)
+        indice_a_cambiar = aleatorio (0, len(vecino) - 1)
+        vecino[indice_a_cambiar] = aleatorioEntre('ACGT')
+    
+        distancia_vecino = FunciónObjetivo(vecino, datos)
+        
+        # Calcula la diferencia en la función objetivo
+		# entre la solución actual y la vecina
+        delta = distancia_vecino - distancia_actual
+        
+        # Decide si aceptar la solución vecina
+        # Si tiene mejor distancia se acepta y mientras
+		# la temperatura sea alta hay una mayor
+		# de probabilidad de aceptar consensos “malos”
+		# con (aleatorio(0,1) < e^(-delta / temperatura))
+		# a medida que la temperatura baja solamente se aceptarán
+		# consensos que tengan una mejor distancia a la actual.
+        
+        Si (delta < 0) o (aleatorio(0,1) < e^(-delta / temperatura))
+            consenso = vecino
+            distancia_actual = distancia_vecino
+        
+        # Actualiza la mejor solución si es necesario
+        Si (distancia_actual < mejor_distancia)
+            mejor_consenso = consenso
+            mejor_distancia = distancia_actual
+        
+        # Se reduce la temperatura 
+        temperatura *= tasa_enfriamiento
+ 
+    Devolver mejor_consenso, mejor_distancia

@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import random
 import time
 import sys
@@ -153,7 +151,7 @@ if __name__ == "__main__":
         genetic_probality = 0.2
 
     data = []
-    with open (f'../n100_m200_l15_a4/'+str(inst)+".txt","r") as input:
+    with open (f'./n100_m200_l15_a4/{inst}.txt',"r") as input:
         for line in input:
             line =line.replace("\n","")
             data.append(line)
