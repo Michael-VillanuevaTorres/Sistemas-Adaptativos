@@ -16,6 +16,48 @@ def objective_function(consensus, data):
         distance += different_letter ** 2
     return distance
 
+def crossover(parent1, parent2):
+    # Punto de cruce
+    crossover_point = random.randint(1, len(parent1) - 1)
+    
+    # Genera hijos combinando las partes de los padres
+    child1 = parent1[:crossover_point] + parent2[crossover_point:]
+    child2 = parent2[:crossover_point] + parent1[crossover_point:]
+    
+    return child1, child2
+
+def mutate(individual):
+    # Mutación: Cambia un carácter aleatorio en el individuo
+    mutation_point = random.randint(0, len(individual) - 1)
+    mutated_individual = list(individual)
+    mutated_individual[mutation_point] = random.choice('ACGT')
+    return ''.join(mutated_individual)
+
+def generate_neighbor(consensus, data, genetic_probability):
+    if random.random() < genetic_probability:
+        # Aplicar operador genético para generar vecino
+        # Selección de dos padres aleatorios
+        parent1 = consensus
+        parent2 = greedy(data)
+        
+        # Aplicar crossover
+        child1, child2 = crossover(parent1, parent2)
+        
+        # Aplicar mutación a los hijos
+        child1 = mutate(child1)
+        child2 = mutate(child2)
+        
+        # Elegir uno de los hijos aleatoriamente como vecino
+        neighbor = child1 if random.random() < 0.5 else child2
+    else:
+        # Generar vecino perturbando la solución actual
+        neighbor = list(consensus)
+        index_to_change = random.randint(0, len(neighbor) - 1)
+        neighbor[index_to_change] = random.choice('ACGT')
+        neighbor = ''.join(neighbor)
+
+    return neighbor
+
 def greedy(data):
     dict = [] 
     ans = ''    
@@ -35,7 +77,7 @@ def greedy(data):
 
     return (result)
 
-def simulated(data, initial_temperature, cooling_rate, max_time):
+def simulated(data,initial_temperature, cooling_rate, max_time,genetic_probability):
     start = time.time()
     best_last_time = max_time
     consensus = greedy(data)
@@ -47,10 +89,7 @@ def simulated(data, initial_temperature, cooling_rate, max_time):
 
     while time.time() - start <= max_time: 
         # Genera una solución vecina perturbando la solución actual
-        neighbor = list(consensus)
-        index_to_change = random.randint(0, len(neighbor) - 1)
-        neighbor[index_to_change] = random.choice('ACGT')
-        neighbor = ''.join(neighbor)
+        neighbor = generate_neighbor(consensus,data,genetic_probability)
 
         neighbor_distance = objective_function(neighbor, data)
         
@@ -80,50 +119,43 @@ def simulated(data, initial_temperature, cooling_rate, max_time):
 if __name__ == "__main__":
 
     try:
+        inst_index = sys.argv.index('-i')
+        inst = sys.argv[inst_index + 1]
+    except:
+        print('Debes ingresar una instancia')
+        exit()
+
+    try:
         maxtime_index = sys.argv.index('-t')
         max_time = sys.argv[maxtime_index + 1]
         max_time = float(max_time)
     except:
         max_time = float(60)
 
-
     try:
         initial_temperature_index = sys.argv.index('-it')
         initial_temperature = sys.argv[initial_temperature_index + 1]
         initial_temperature = float(initial_temperature)
     except:
-        initial_temperature = 9000.0
+        initial_temperature = 13000
 
     try:
         cooling_rate_index = sys.argv.index('-c')
         cooling_rate = sys.argv[cooling_rate_index + 1]
         cooling_rate = float(cooling_rate)
     except:
-        cooling_rate = 0.9
+        cooling_rate = 0.6
+    try:
+        genetic_probality_index = sys.argv.index('-g')
+        genetic_probality = sys.argv[genetic_probality_index + 1]
+        genetic_probality = float(genetic_probality)
+    except:
+        genetic_probality = 0.2
 
-    n=100
-    with open('resultados_500.txt', 'w') as output:
-        tiempo_promedio = 0
-        fitness_promedio = 0
-        output.write("inst    m     l     mh")
-        mh_time = 0
-        distance_prom=0
-        for aux in range(3):
-            for inst in range(100):
-                data = []
-                with open (f'../n100_m200_l15_a4/inst_500_'+str(n)+'_4_'+str(inst)+'.txt',"r") as input:
-                    for line in input:
-                        line =line.replace("\n","")
-                        data.append(line)
-
-                best_consensus, best_distance, best_last_time = simulated(data, initial_temperature, cooling_rate, max_time)
-                print(best_distance)
-                output.write(str(inst)+" 500   "+str(n)+"   "+str(best_distance)+"\n")
-                mh_time+=best_last_time
-                distance_prom=distance_prom+best_distance
-            n=n+200
-            
-            mh_time /= 100
-            distance_prom/=100
-            print('Tiempo Mh Promedio = ' + str(mh_time) + 's')
-            print('Distancia Mh Promedio = ' + str(distance_prom) + 's')
+    data = []
+    with open (f'../n100_m200_l15_a4/'+str(inst)+".txt","r") as input:
+        for line in input:
+            line =line.replace("\n","")
+            data.append(line)
+    best_consensus, best_distance, best_time = simulated(data, initial_temperature, cooling_rate, max_time,genetic_probality)
+    print(f'{best_distance}')
